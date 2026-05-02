@@ -1,0 +1,16 @@
+Die allererste bearbeitung wurde irgendwie gelöscht
+
+
+Git:
+Wir sind in der branch B03
+Es sind zwei datein im stage Contributing.md und Homework.md
+
+die datei foo.java wird komplett ignoriert
+
+keine änderungen wurde hinzugefügt
+
+foo.java anfügen:
+git add foo.java git commit -m "foo wurde hinzugefügt"
+
+
+
