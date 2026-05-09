@@ -1,0 +1,23 @@
+Aufgaben
+1)
+1.1
+Hier gab es einen konflikt mit den files die ich bereits geändert hatte damit es funktioniert habe ich diee
+änderungen rückgangig gemacht und anschließend gemerged
+
+Conflicts:
+Auto-merging questlog.md CONFLICT (content): Merge conflict in questlog.md Auto-merging rucksack.md CONFLICT (content): Merge conflict in rucksack.md Auto-merging stats.md CONFLICT (content): Merge conflict in stats.md Automatic merge failed; fix conflicts and then commit the result.
+Merge:
+commit 4044158e51d3a83c7c39870a05b9c1063c3bb072 (HEAD -> master)
+Merge: 96408fb 6405bd9
+Author: Hennes <///>
+Date:   Sat May 9 08:39:25 2026 +0200
+
+    Merge remote-tracking branch 'origin/end'
+
+commit 96408fbff727be48732d76d3a0d58d1596f60fc6
+Author: Hennes <///>
+Date:   Sat May 9 08:33:58 2026 +0200
+
+    Hier wurde der Shopkeeper.md geändert
+
+1.2
