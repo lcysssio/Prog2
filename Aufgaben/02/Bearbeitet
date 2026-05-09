@@ -28,3 +28,11 @@ Hier habe ich nun questlog geändert und anschließend versucht zu mergen da end
 sagt er mir das es bereits up to date ist.
 
 1.3
+Bei der ersten änderung gab es keine konflikte
+git merge end
+Merge made by the 'ort' strategy.
+
+Der zweite merge wo die datein jeweil andere änderungen hatten gab es konflike wie bei aufgabe 1
+Hier konnte man aussuchen welche änderung man behalten möchte (durch löschen der anderen)
+anschließend konnte man mergen
+Auto-merging questlog.md CONFLICT (content): Merge conflict in questlog.md Automatic merge failed; fix conflicts and then commit the result.
