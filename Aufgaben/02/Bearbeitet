@@ -38,3 +38,16 @@ anschließend konnte man mergen
 Auto-merging questlog.md CONFLICT (content): Merge conflict in questlog.md Automatic merge failed; fix conflicts and then commit the result.
 
 1.4
+Hier gab es einen konflikt :
+git rebase master
+Auto-merging questlog.md
+CONFLICT (content): Merge conflict in questlog.md
+error: could not apply b84ee18... ander stelle 1.4
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+Could not apply b84ee18... ander stelle 1.4
+
+Da wieder alles makiert wurde konnte man entscheiden was man behalten möchte beim rebasen (an die spitze stellen)
+
