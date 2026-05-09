@@ -36,3 +36,5 @@ Der zweite merge wo die datein jeweil andere änderungen hatten gab es konflike 
 Hier konnte man aussuchen welche änderung man behalten möchte (durch löschen der anderen)
 anschließend konnte man mergen
 Auto-merging questlog.md CONFLICT (content): Merge conflict in questlog.md Automatic merge failed; fix conflicts and then commit the result.
+
+1.4
