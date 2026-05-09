@@ -21,3 +21,10 @@ Date:   Sat May 9 08:33:58 2026 +0200
     Hier wurde der Shopkeeper.md geändert
 
 1.2
+git merge end
+Already up to date.
+
+Hier habe ich nun questlog geändert und anschließend versucht zu mergen da end aber nun keine anderen commits hat
+sagt er mir das es bereits up to date ist.
+
+1.3
