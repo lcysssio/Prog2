@@ -1,0 +1,44 @@
+// Minimal Gradle build for the calculator project
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'calculator'
+version = '1.0.0'
+
+// Use Java toolchain to target Java 25
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Unit testing
+    testImplementation 'junit:junit:4.13.2'
+}
+
+application {
+    // modern Gradle API: set the main class via a property
+    mainClass.set('calculator.Main')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.jar {
+    manifest {
+        attributes(
+                'Implementation-Title': project.name,
+                'Implementation-Version': project.version,
+                'Main-Class': application.mainClass.get()
+        )
+    }
+}
