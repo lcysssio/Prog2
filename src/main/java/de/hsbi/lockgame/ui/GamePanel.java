@@ -2,6 +2,7 @@ package de.hsbi.lockgame.ui;
 
 import de.hsbi.lockgame.logic.GameEngine;
 import de.hsbi.lockgame.logic.GameState;
+import de.hsbi.lockgame.logic.Observer;
 import de.hsbi.lockgame.model.Direction;
 import de.hsbi.lockgame.settings.GameConstants;
 import de.hsbi.lockgame.settings.InputConstants;
@@ -10,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Observer {
   private GameState state;
   private final GameRenderer renderer;
   private GameEngine gameEngine;
