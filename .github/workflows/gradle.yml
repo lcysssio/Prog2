@@ -2,9 +2,10 @@ name: CI
 
 on:
   
-  pull_request:
+  pull_request: 
+            branches:
+              - Syntaxhighlight
   
-
 
 jobs:
   build:
