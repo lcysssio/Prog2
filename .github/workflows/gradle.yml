@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  
+  pull_request:
+  
+
+
+jobs:
+  build:
+    name: Kompilieren
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Code auschecken
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    # Kompiliert nur das Projekt (erstellt nur die .class-Dateien ohne Tests)
+    - name: Projekt kompilieren
+      run: ./gradlew compileJava compileTestJava
+
+  test:
+    name: JUnit-Tests ausführen
+    needs: build # Wartet, bis der Build-Job erfolgreich war
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Code auschecken
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    # Führt ausschließlich die JUnit-Tests aus
+    - name: Tests ausführen
+      run: ./gradlew test
+
+  format:
+    name: Spotless Formatierungscheck
+    needs: build # Wartet ebenfalls, bis der Build-Job erfolgreich war
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Code auschecken
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    # Prüft im "testenden" Modus, ob der Code korrekt formatiert ist (schlägt fehl bei Abweichungen)
+    - name: Spotless Code-Format prüfen
+      run: ./gradlew spotlessCheck
