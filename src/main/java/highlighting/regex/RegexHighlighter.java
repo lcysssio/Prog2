@@ -2,6 +2,9 @@ package highlighting.regex;
 
 import highlighting.core.HighlightRegion;
 import highlighting.core.SyntaxHighlighter;
+import highlighting.presets.MiniJavaTokens;
+
+import java.util.ArrayList;
 import java.util.List;
 
 // TODO: Implement a simple regex-based highlighting strategy. Unlike the scanning approach, this
@@ -11,21 +14,45 @@ import java.util.List;
 // TODO: Make this class extend {@code SyntaxHighlighter}, implement the abstract method {@code
 // collectMatches}, and override {@code resolveConflicts} to handle overlapping regions produced by
 // the naive regex-based strategy.
-public class RegexHighlighter extends SyntaxHighlighter {
+public class RegexHighlighter extends SyntaxHighlighter  {
 
   // TODO: For each token, find all matches of its pattern in the input text, convert them into
   // {@code HighlightRegion}s, and combine all of these regions into a single list.
   @Override
   public List<HighlightRegion> collectMatches(String text) {
-    throw new UnsupportedOperationException("not implemented yet");
+      var candidates = new ArrayList<HighlightRegion>();
+      for (var token : MiniJavaTokens.defaultTokens()) {
+          candidates.addAll(token.test(text));
+      }
+      return candidates;
   }
+
 
   // TODO: Resolve overlapping regions. Assume that {@code regions} has been normalised and sorted.
   // For any overlapping regions, keep the one that appears first in this list (which reflects the
   // token order) and discard all later overlapping regions. Longer regions that start at the same
   // position are preferred because of the sorting in {@code normalize}.
   @Override
-  public List<HighlightRegion> resolveConflicts(List<HighlightRegion> regions) {
-    throw new UnsupportedOperationException("not implemented yet");
+  public List<HighlightRegion> resolveConflicts(List<HighlightRegion> normalized) {
+    var finale = new  ArrayList<HighlightRegion>();
+    HighlightRegion a = null;
+    for (HighlightRegion token : normalized) {
+        if (a == null || token.start() >= a.end()) {
+            finale.add(token);
+            a = token;
+            continue;
+        }
+
+
+        if (token.start() < a.end()) {
+            continue;
+        }
+        finale.add(a);
+        a = token;
+
+    }
+
+
+    return finale;
   }
 }
