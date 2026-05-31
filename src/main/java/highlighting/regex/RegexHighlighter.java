@@ -34,25 +34,16 @@ public class RegexHighlighter extends SyntaxHighlighter  {
   // position are preferred because of the sorting in {@code normalize}.
   @Override
   public List<HighlightRegion> resolveConflicts(List<HighlightRegion> normalized) {
-    var finale = new  ArrayList<HighlightRegion>();
-    HighlightRegion a = null;
-    for (HighlightRegion token : normalized) {
-        if (a == null || token.start() >= a.end()) {
-            finale.add(token);
-            a = token;
-            continue;
-        }
+    var resolved = new ArrayList<HighlightRegion>();
+    HighlightRegion lastKept = null;
 
-
-        if (token.start() < a.end()) {
-            continue;
-        }
-        finale.add(a);
-        a = token;
-
+    for (HighlightRegion region : normalized) {
+      if (lastKept == null || region.start() >= lastKept.end()) {
+        resolved.add(region);
+        lastKept = region;
+      }
     }
 
-
-    return finale;
+    return resolved;
   }
 }
