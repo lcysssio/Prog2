@@ -58,10 +58,11 @@ public class Tests {
 
     @Test
     void annotation_am_zeilenanfang_und_mit_leerzeichen() {
-        Token annotation = findTokenByRegex("@Override");
+        Token annotation = findTokenByRegex("@Override\\b");
 
         assertEquals(1, annotation.test("@Override").size());
         assertEquals(1, annotation.test("   @Override").size());
+        assertTrue(annotation.test("@Overrides").isEmpty());
     }
 
     @Test

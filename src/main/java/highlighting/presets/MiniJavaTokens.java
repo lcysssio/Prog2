@@ -23,7 +23,7 @@ public final class MiniJavaTokens {
         Token.of(Pattern.compile("/\\*\\*[\\s\\S]*?\\*/"), MiniJavaColours.JAVADOC_COMMENT_COLOUR),
         Token.of(Pattern.compile("'([^'\\\\]|\\\\.)'"), MiniJavaColours.CHAR_LITERAL_COLOUR),
         Token.of(Pattern.compile(("\\b(package|import|class|public|private|final|return|null|new)\\b")), MiniJavaColours.KEYWORD_COLOUR),
-        Token.of(Pattern.compile("@Override"), MiniJavaColours.ANNOTATION_COLOUR),
+        Token.of(Pattern.compile("@Override\\b"), MiniJavaColours.ANNOTATION_COLOUR)
         Token.of(Pattern.compile("//[^\\n]*"), MiniJavaColours.LINE_COMMENT_COLOUR),
         Token.of(Pattern.compile("/\\*[\\s\\S]*?\\*/"), MiniJavaColours.BLOCK_COMMENT_COLOUR)
 
