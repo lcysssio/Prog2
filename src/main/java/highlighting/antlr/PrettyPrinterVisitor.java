@@ -42,60 +42,93 @@ public final class PrettyPrinterVisitor extends MiniJavaBaseVisitor<Void> {
 
   @Override
   public Void visitCompilationUnit(MiniJavaParser.CompilationUnitContext ctx) {
-      ctx.accept(this);
+    // package
+    if (ctx.packageDecl() != null) {
+      visit(ctx.packageDecl());
+      nl();
+      nl();
+    }
 
-    // TODO:
-    // Produce a nicely structured compilation unit:
-    // - package declaration (if present),
-    // - import declarations (one per line),
-    // - type declarations (one after another),
-    // with sensible blank lines between these parts.
+    // imports
+    if (ctx.importDecl() != null && !ctx.importDecl().isEmpty()) {
+      for (var imp : ctx.importDecl()) {
+        visit(imp);
+        nl();
+      }
+      nl();
+    }
+
+    // type
+    var types = ctx.typeDecl();
+    for (int i = 0; i < types.size(); i++) {
+      visit(types.get(i));
+      if (i + 1 < types.size()) nl();
+    }
+
     return null;
   }
 
   @Override
   public Void visitClassBody(MiniJavaParser.ClassBodyContext ctx) {
-      ctx.accept(this);
-    // TODO:
-    // Format the contents of a class body:
-    // - opening and closing brace,
-    // - one member declaration per line,
-    // - members indented relative to the class.
+    // Erzeuge sichtbare Struktur: öffnende Klammer, eingerückte Mitglieder, schließende Klammer.
+    // (Wenn die umliegende Regel bereits die '{'/' }' schreibt, kannst du das hier anpassen.)
+    writeln("{");
+    currentIndent++;
+
+    for (var decl : ctx.classBodyDeclaration()) {
+      visit(decl);
+      if (!atLineStart) nl();
+    }
+
+    currentIndent--;
+    writeln("}");
     return null;
   }
 
   @Override
   public Void visitBlock(MiniJavaParser.BlockContext ctx) {
-      ctx.accept(this);
-      // TODO:
-    // Format a block:
-    // - opening and closing brace,
-    // - one blockStatement per line,
-    // - nested blocks indented further.
+    // Blockstruktur: { newline, indented children, then } on its own line
+    writeln("{");
+    currentIndent++;
+
+    for (var bs : ctx.blockStatement()) {
+      visit(bs);
+      if (!atLineStart) nl();
+    }
+
+    currentIndent--;
+    writeln("}");
     return null;
   }
 
   @Override
   public Void visitStatement(MiniJavaParser.StatementContext ctx) {
-      ctx.accept(this);
-      // TODO:
-    // Ensure that each statement (if/while/return/block/...) ends up
-    // on exactly one line, with proper indentation for nested statements.
+    // Wenn Statement selbst ein Block ist, übertrage an visit(block)
+    if (ctx.block() != null) {
+      visit(ctx.block());
+      return null;
+    }
+
+    // Andernfalls: besuche die Kinder
+    visitChildren(ctx);
+
+    if (!atLineStart) nl();
     return null;
   }
 
   // ---------------- helper methods ----------------
 
-  private void indent() {
+  private void indent(int indentWidth) {
     if (atLineStart) {
-      out.repeat(" ", Math.max(0, indentWidth * currentIndent));
+      int spaces = Math.max(0, indentWidth * currentIndent);
+      out.append(" ".repeat(spaces));
       atLineStart = false;
     }
   }
 
-  private void write(String s) {
+  private void write(String s, int indentWidth) {
     if (s == null || s.isEmpty()) return;
-    indent();
+    indent(indentWidth);
     out.append(s);
   }
 
@@ -106,7 +139,7 @@ public final class PrettyPrinterVisitor extends MiniJavaBaseVisitor<Void> {
   }
 
   private void writeln(String s) {
-    write(s);
+    write(s, indentWidth);
     nl();
   }
 
@@ -122,10 +155,10 @@ public final class PrettyPrinterVisitor extends MiniJavaBaseVisitor<Void> {
       int curType = t.getType();
 
       // Simple heuristic: insert a space between "word-like" tokens
-      if (needsSpaceBetween(prevType, curType)) write(" ");
+      if (needsSpaceBetween(prevType, curType)) write(" ", indentWidth);
     }
 
-    write(text);
+    write(text, indentWidth);
     lastToken = t;
     return null;
   }
