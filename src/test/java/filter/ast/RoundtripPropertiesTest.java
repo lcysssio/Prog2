@@ -2,19 +2,60 @@ package filter.ast;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import filter.FilterParser;
 import filter.ast.builder.AstBuilderPattern;
 import filter.ast.builder.AstBuilderVisitor;
 import filter.ast.builder.AstBuilders;
+import filter.ast.nodes.Expr;
 import filter.ast.printer.AstPrinter;
 import net.jqwik.api.*;
 
 public class RoundtripPropertiesTest {
 
-  // TODO
+    @Property
+    boolean roundtrip(@ForAll("simpleQueries") String query) {
 
-  // ---------- @Provide-Methods for Arbitraries ----------
+        var ctx = AstBuilders.parse(query);
 
-  @Provide
+        Expr ast1 = new AstBuilderVisitor().translate(ctx);
+
+        String printed = AstPrinter.toString(ast1);
+
+        Expr ast2 = new AstBuilderVisitor().translate(AstBuilders.parse(printed));
+
+        return ast1.equals(ast2);
+    }
+
+    @Property
+    boolean printerStable(@ForAll("simpleQueries") String query) {
+
+        var ctx = AstBuilders.parse(query);
+
+        Expr ast = new AstBuilderVisitor().translate(ctx);
+
+        String p1 = AstPrinter.toString(ast);
+        String p2 = AstPrinter.toString(
+            new AstBuilderVisitor().translate(AstBuilders.parse(p1))
+        );
+
+        return p1.equals(p2);
+    }
+
+    @Property
+    boolean simplifyIdempotent(@ForAll("simpleQueries") String query) {
+
+        var ctx = AstBuilders.parse(query);
+
+        Expr ast = new AstBuilderVisitor().translate(ctx);
+
+        Expr s1 = AstBuilders.simplify(ast);
+        Expr s2 = AstBuilders.simplify(s1);
+
+        return s1.equals(s2);
+    }
+
+
+    @Provide
   Arbitrary<String> fields() {
     return Arbitraries.of("title", "artist", "genre", "year");
   }
