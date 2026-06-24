@@ -3,6 +3,7 @@ package org.zoo;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.*;
 
 public class Zoo {
     private String name;
@@ -12,7 +13,8 @@ public class Zoo {
         this.name = name;
         this.enclosureList = new ArrayList<>();
     }
-///////////////////////////////////////////////////////////////////////////////
+
+    /// ////////////////////////////////////////////////////////////////////////////
     public boolean addenclosure(enclosure<?> enclosure) {
         enclosureList.add(enclosure);
         return true;
@@ -22,30 +24,48 @@ public class Zoo {
         return enclosureList;
     }
 
-    public enclosure<?> finenclosurebyname(String name){
-        if (enclosureList.contains(name)){
+    public enclosure<?> finenclosurebyname(String name) {
+        if (enclosureList.contains(name)) {
             for (enclosure<?> enclosure : enclosureList) {
                 if (enclosure.getname().equals(name)) {
                     return enclosure;
                 }
             }
         }
-            return null;
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////
+        return null;
+        //stream vergessen
+        ////////////////////////////////////////////////////////////////////////////////////////
 
-
-    public List getanimals(){
-        List<Animals> animalsList = new ArrayList<>();
-        for (enclosure<?> enclosure : enclosureList) {
-            animalsList.addAll(enclosure.getinhabitants());
-        }
-        return animalsList;
     }
 
+    public List<Animals> getanimals() {
+        return enclosureList.stream()
+                .flatMap(enclosure -> enclosure.getinhabitants().stream())
+                .map(animal -> (Animals) animal)
+                .toList();
+    }
+
+    public List<Mammal> getallmammals() {
+        return enclosureList.stream()
+                .flatMap(enclosure -> enclosure.getinhabitants().stream())
+                .filter(animal -> animal instanceof Mammal)
+                .map(animal -> (Mammal) animal)
+                .toList();
+    }
+    public List<> getbypredicate(Animals A){
+        return enclosureList.stream()
+                .flatMap(enclosure -> enclosure.getinhabitants().stream())
+                .filter(animal -> animal.equals(A))
+                .toList();
+    }
 
 
-
-
+    public int countanimalsbytype() {
+        return enclosureList.stream()
+                .flatMap(enclosure -> enclosure.getinhabitants().stream())
+                .map(animal -> animal.getClass().getSimpleName())
+                .collect(Collectors.groupingBy(type -> type, Collectors.counting()))
+                .size();
+    }
 
 }

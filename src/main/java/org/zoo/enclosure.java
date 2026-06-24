@@ -38,7 +38,7 @@ public String getname() {
         }
     }
     public List<T> getinhabitants() {
-        return AnimalsList;
+        return AnimalsList.stream().toList();
     }
 
 
