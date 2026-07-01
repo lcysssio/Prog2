@@ -2,6 +2,8 @@ package org.zoo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class enclosure <T extends Animals> {
 
@@ -40,6 +42,21 @@ public String getname() {
     public List<T> getinhabitants() {
         return AnimalsList.stream().toList();
     }
+
+
+public Optional<T> getAnimalByName(String name) {
+AnimalsList.stream()
+        .filter(animal -> animal.getname().equals(name) )
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Animal not found"));
+
+return Optional.empty();
+
+
+}
+
+
+
 
 
 
