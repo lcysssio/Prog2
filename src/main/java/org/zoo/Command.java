@@ -1,8 +1,8 @@
 package org.zoo;
 
-public interface Command<T> {
+public interface Command<T, E, R> {
 
-    void execute(T ziel ) ;
-    void undo(T ziel) ;
+    Results<E,R> execute(T ziel ) ;
+    Results<E,R> undo(T ziel) ;
     String description();
 }

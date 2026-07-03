@@ -1,6 +1,6 @@
 package org.zoo;
 
-public class AddAnimalCommand<A extends Animals> implements Command<enclosure<? super A>> {
+public class AddAnimalCommand<A extends Animals> implements Command<enclosure<? super A>, Zooerror, A> {
 
     private final A animal;
     private boolean executed = false;
@@ -10,26 +10,27 @@ public class AddAnimalCommand<A extends Animals> implements Command<enclosure<? 
     }
 
 
-    public void execute(enclosure<? super A> ziel) {
+    public Results<Zooerror, A> execute(enclosure<? super A> ziel) {
         boolean added = ((enclosure<A>) ziel).addlist(animal);
         if (!added) {
-            System.out.println("Could not add animal '" + animal + "' to enclosure – already present.");
+            return new Results.Error<>(Zooerror.Animal_already_exists);
         } else {
             executed = true;
+            return new Results.Result<>(animal);
         }
     }
 
 
-    public void undo(enclosure<? super A> ziel) {
+    public Results<Zooerror, A> undo(enclosure<? super A> ziel) {
         if (!executed) {
-            System.out.println("Undo not possible: command has not been executed yet.");
-            return;
+            return new Results.Error<>(Zooerror.Commmand_has_not_been_executed_yet);
         }
         boolean removed = ((enclosure<A>) ziel).removeList(animal);
         if (!removed) {
-            System.out.println("Could not remove animal '" + animal + "' during undo.");
+            return new Results.Error<>(Zooerror.couldnt_remove_animal_during_undo);
         } else {
             executed = false;
+            return new Results.Result<>(animal);
         }
     }
 
